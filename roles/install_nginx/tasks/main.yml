@@ -1,0 +1,87 @@
+---
+# tasks file for install_nginx
+- block
+  - name: Install epel-release
+    yum:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - epel-release
+
+  - name: Install nginx
+    yum:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - nginx
+    notify:
+      - startup_nginx
+
+  - name: 
+    firewalld:
+      service: "{{ item }}"
+      permanent: yes
+      state: enabled
+    loop:
+      - http
+      - https
+
+  - name: Создание папок
+    shell: chown "{{ item }}"
+    loop:
+      - "{{ dir_for_site }}"
+
+  - name: Назначение прав
+    shell: chown nginx:nginx "{{ item }}"
+    loop:
+      - "{{ dir_for_site }}"
+
+  - name: write the apache config file
+    template:
+      src: nginx.conf.j2
+      dest: /etc/nginx/nginx.conf
+    notify:
+      - restart_nginx
+
+  
+  when: ansible_os_family == "RedHat"
+
+
+- block
+  - name: Install nginx
+    apt:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - nginx
+    
+
+  - name: 
+    firewalld:
+      service: "{{ item }}"
+      permanent: yes
+      state: enabled
+    loop:
+      - http
+      - https
+
+  - name: write the nginx config file
+    copy:
+      src: nginx.conf
+      dest: /etc/nginx/nginx.conf
+
+
+  - name: write the site config file
+    template:
+      src: sait.conf.j2
+      dest: /etc/nginx/conf.d/"{{ site }}".conf
+    
+  - name: Назначение прав
+    shell: chown nginx:nginx "{{ item }}"
+    loop:
+      - "{{ dir_for_site }}"
+    notify:
+      - startup_nginx
+
+  
+when: ansible_os_family == "Debian"

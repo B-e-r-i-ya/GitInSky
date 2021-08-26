@@ -1,0 +1,44 @@
+---
+# tasks file for roles/initialization
+- name: Install Debian
+  block:
+  
+  - name: Install packeg
+    apt:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - mc
+      - chrony
+      - zsh
+      - wget
+
+  - name: time zone
+    shell: timedatectl set-timezone europe/moscow
+  
+  - ansible.posix.sysctl:
+    name: fs.files-max
+    value: '1204000'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+  - ansible.posix.sysctl:
+    name: somaxconn
+    value: '65535'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+  - name: ssh key Install
+    file:
+      path: /root/.ssh
+      state: directory
+  - copy:
+      src: authorized_keys
+      dest: /root/.ssh
+      owner: root
+      group: root
+      mode: '0644'
+  
+  when: ansible_os_family == "Debian"

@@ -1,0 +1,6 @@
+---
+# defaults file for install_nginx
+dir_for_site: 
+  - /var/www/html
+site:
+  - site.ru
