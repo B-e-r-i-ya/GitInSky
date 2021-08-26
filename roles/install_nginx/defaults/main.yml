@@ -4,3 +4,5 @@ dir_for_site:
   - /var/www/html
 site:
   - site.ru
+URL_git:
+  - https://github.com/B-e-r-i-ya/site.git

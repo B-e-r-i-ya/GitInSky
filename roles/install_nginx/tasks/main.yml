@@ -36,7 +36,7 @@
     loop:
       - "{{ dir_for_site }}"
 
-  - name: write the apache config file
+  - name: write the nginx config file
     template:
       src: nginx.conf.j2
       dest: /etc/nginx/nginx.conf
@@ -80,6 +80,13 @@
     shell: chown nginx:nginx "{{ item }}"
     loop:
       - "{{ dir_for_site }}"
+
+  - name: Example clone of a single branch
+    ansible.builtin.git:
+      repo: "{{ URL_git }}"
+      dest: "{{ dir_for_site }}"
+      single_branch: no
+      version: master  
     notify:
       - startup_nginx
 
