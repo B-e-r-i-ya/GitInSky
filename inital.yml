@@ -1,0 +1,7 @@
+---
+- hosts: nginxtest
+  become: yes
+  #become_user: root
+  roles:
+    - roles/initialization
+    - roles/install_nginx

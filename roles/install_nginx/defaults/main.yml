@@ -1,8 +1,8 @@
 ---
 # defaults file for install_nginx
 dir_for_site: 
-  - /var/www/html
+  - /var/www/html/site
 site:
   - site.ru
 URL_git:
-  - https://github.com/B-e-r-i-ya/site.git
+  - https://github.com/B-e-r-i-ya/site1.git

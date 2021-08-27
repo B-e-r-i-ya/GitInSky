@@ -5,31 +5,22 @@
   
   - name: Install packeg
     apt:
-      name: "{{ item }}"
-      state: latest
-    loop:
-      - mc
-      - chrony
-      - zsh
+      pkg:
       - wget
+      - git
 
-  - name: time zone
-    shell: timedatectl set-timezone europe/moscow
-  
-  - ansible.posix.sysctl:
-    name: fs.files-max
-    value: '1204000'
-    sysctl_set: yes
-    state: present
-    reload: yes
-
-  - ansible.posix.sysctl:
-    name: somaxconn
-    value: '65535'
-    sysctl_set: yes
-    state: present
-    reload: yes
-
+  #- sysctl:
+  #    name: fs.files-max
+  #    value: '1204000'
+  #    state: present
+  #    reload: yes
+            
+  #- sysctl:
+  #    name: net.core.somaxconn
+  #    value: '65535'
+  #    state: present
+  #    reload: yes
+      
   - name: ssh key Install
     file:
       path: /root/.ssh
